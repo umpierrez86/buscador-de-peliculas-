@@ -31,3 +31,9 @@ main {
     background-color: #212529;
     color: white;
 }
+
+#drop{
+    position: absolute;
+    left: 92%;
+    bottom: 10px;
+}

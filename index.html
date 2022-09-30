@@ -29,6 +29,29 @@
       <ul class="list-group container" id="lista">
       </ul>
     </div>
+    <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+      <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="titulo"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+          <div id="cuerpo">
+              
+          </div><hr>
+          <small class="text-muted" id="gen"></small>
+          <div class="dropdown mt-3" id="drop">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                  More
+              </button>
+              <ul class="dropdown-menu">
+                  <li class="dropdown-item" id="year"></li>
+                  <li class="dropdown-item" id="time"></li>
+                  <li class="dropdown-item" id="presupuesto"></li>
+                  <li class="dropdown-item" id="ganancia"></li>
+              </ul>
+          </div>
+      </div>
+    </div>
   </main>
 
   <footer class="text-muted py-3">

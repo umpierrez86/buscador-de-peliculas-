@@ -1,31 +1,30 @@
 const url = "https://japceibal.github.io/japflix_api/movies-data.json";
 listado = [];
+listaNueva = [];
 
-function desplegar(movie) {
-  let desplegar = "";
-  desplegar = `
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasExampleLabel">${movie.title}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <div>
-                Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
-            </div>
-            <div class="dropdown mt-3">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    Dropdown button
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    `;
+function desplegar(indice) {
+  document.getElementById("titulo").innerHTML = listaNueva[indice].title;
+  
+  document.getElementById("cuerpo").innerHTML = listaNueva[indice].overview;
+  
+  let contenido = "";
+  let generos  = listaNueva[indice].genres
+  for(let i = 0; i < generos.length; i++){
+    if(i == generos.length - 1)
+      contenido += `${generos[i].name}`
+    else
+      contenido += `${generos[i].name}-`
+  }
+  document.getElementById("gen").innerHTML = contenido;
+  
+  document.getElementById("year").innerHTML = `Year:  ${listaNueva[indice].release_date.substring(0,4)}`;
+  
+  document.getElementById("time").innerHTML = `Runtime:  ${listaNueva[indice].runtime}  mins`;
+  
+  document.getElementById("presupuesto").innerHTML = `Budget:  $${listaNueva[indice].budget}`;
+  
+  document.getElementById("ganancia").innerHTML = `Revenue:  $${listaNueva[indice].revenue}`;
+  
 }
 
 function estrellas(puntos) {
@@ -45,24 +44,37 @@ function mostrarListas(lista) {
   for (let i = 0; i < lista.length; i++) {
     let peli = lista[i];
     contenido += `
-        <li onclick="desplegar(${peli})" class="list-group-item" class="color"><div><strong>${peli.title}</strong>
-        <span style="text-align: right;">${estrellas(Math.round(peli.vote_average / 2))}</span></div>
+        <li onclick="desplegar(${i})" class="list-group-item" class="color" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"><div><strong>${peli.title}</strong>
+        <span>${estrellas(Math.round(peli.vote_average / 2))}</span></div>
         <small class="text-muted">${peli.tagline}</small></li>
         `;
   }
   document.getElementById("lista").innerHTML = contenido;
 }
 
+function filtrarGenero(listaGeneros, textoABuscar){
+  for(genero of listaGeneros){
+    if(genero.name.toLowerCase().indexOf(textoABuscar.toLowerCase()) > -1)
+      return true;
+  }
+  return false;
+}
+
+function filtradoPeli(peli, text){
+  return peli.toLowerCase().indexOf(text.toLowerCase()) > -1;
+}
+
 function filtrado() {
   let texto = document.getElementById("inputBuscar").value;
-  let listaNueva = listado.filter((pelicula) => {
+  listaNueva = listado.filter((pelicula) => {
     return (
-      pelicula.title.toLowerCase().indexOf(texto.toLowerCase()) > -1 ||
-      pelicula.overview.toLowerCase().indexOf(texto.toLowerCase()) > -1 ||
-      pelicula.tagline.toLowerCase().indexOf(texto.toLowerCase()) > -1 ||
-      pelicula.genres.filter((x) => {
+      filtradoPeli(pelicula.title,texto) ||
+      filtradoPeli(pelicula.overview,texto)||
+      filtradoPeli(pelicula.tagline,texto) ||
+      filtrarGenero(pelicula.genres,texto)
+      /*pelicula.genres.filter((x) => {
         x.name.indexOf(texto.toLowerCase()) > -1;
-      }).length >= 1
+      }).length >= 1*/
     );
   });
   mostrarListas(listaNueva);
